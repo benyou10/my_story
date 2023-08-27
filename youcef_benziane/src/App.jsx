@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import * as THREE from 'three';
-
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import Stats from "three/examples/jsm/libs/stats.module.js"
 function App() {
   useEffect(() => {
     const scene = new THREE.Scene();
@@ -11,7 +12,7 @@ function App() {
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
     renderer.setSize(window.innerWidth,  window.innerHeight
       );
-
+   
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
 
@@ -22,12 +23,16 @@ function App() {
     const boxMaterial = new THREE.MeshNormalMaterial();
     const boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
     scene.add(boxMesh);
-
+    const controls = new OrbitControls( camera, renderer.domElement );
+const stats =Stats();
     const animate = () => {
       boxMesh.rotation.x += 0.01;
       boxMesh.rotation.y += 0.01;
+     
             renderer.render(scene, camera);
       window.requestAnimationFrame(animate);
+      controls.update();
+      stats.update();
     };
 
     const handleResize = () => {
@@ -41,14 +46,20 @@ function App() {
     };
 
     window.addEventListener('resize', handleResize);
-
+console.log("rrr")
     animate();
   }, []);
 
   return (
-    <>
-      <canvas id="three_js_canvas"></canvas>
-    </>
+   
+    
+    <div className="relative">
+    <canvas  id="three_js_canvas"></canvas>
+      <div className=" mt-40 absolute inset-0 flex justify-center items-center h-screen ">
+      <h1 className="mt-40 text-white text-6xl">Loading ...</h1>
+    </div>
+    </div>
+    
   );
 }
 
